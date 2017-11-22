@@ -46,11 +46,17 @@ RUN apt-get update && \
     apt-get update && \
     apt-get install -y --no-install-recommends $BM_DEPS $BM_RUNTIME_DEPS && \
     ./autogen.sh && \
-    if [ "$GCOV" != "" ]; then ./configure --with-pdfixed --with-stress-tests --enable-debugger --enable-coverage; fi && \
-    if [ "$GCOV" = "" ]; then ./configure --with-pdfixed --with-stress-tests --enable-debugger; fi && \
+    if [ "$GCOV" != "" ]; then ./configure --with-pdfixed --with-pi --with-stress-tests --enable-debugger --enable-coverage; fi && \
+    if [ "$GCOV" = "" ]; then ./configure --with-pdfixed --with-pi --with-stress-tests --enable-debugger; fi && \
+    make && \
+    make install-strip && \
+    cd targets/simple_switch_grpc/ && \
+    ./autogen.sh && \
+    ./configure && \
     make && \
     make install-strip && \
     ldconfig && \
+    cd - && \
     (test "$IMAGE_TYPE" = "build" && \
       apt-get purge -y $BM_DEPS && \
       apt-get autoremove --purge -y && \
